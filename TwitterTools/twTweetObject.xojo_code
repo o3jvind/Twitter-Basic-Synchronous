@@ -13,11 +13,11 @@ Protected Class twTweetObject
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		twUserImage As Picture
+		twProfileImage As Picture
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		twUserImagePath As Text
+		twProfileImagePath As Text
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
@@ -75,12 +75,12 @@ Protected Class twTweetObject
 			Type="Text"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="twUserImage"
+			Name="twProfileImage"
 			Group="Behavior"
 			Type="Picture"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="twUserImagePath"
+			Name="twProfileImagePath"
 			Group="Behavior"
 			Type="Text"
 		#tag EndViewProperty

@@ -5,7 +5,7 @@ Inherits Listbox
 		Function CellTextPaint(g As Graphics, row As Integer, column As Integer, x as Integer, y as Integer) As Boolean
 		  If column = 0 Then
 		    
-		    g.DrawPicture(twTweets(row).twUserImage, 0, 0)
+		    g.DrawPicture(twTweets(row).twProfileImage, 0, 0)
 		  End If
 		  
 		  dim s as string = me.Cell(row, column)
@@ -292,6 +292,13 @@ Inherits Listbox
 				"0 - Single"
 				"1 - Multiple"
 			#tag EndEnumValues
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="ShowDropIndicator"
+			Visible=true
+			Group="Appearance"
+			InitialValue="False"
+			Type="Boolean"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"

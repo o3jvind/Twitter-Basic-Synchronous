@@ -1,23 +1,23 @@
 #tag Module
 Protected Module TwitterTools
 	#tag Method, Flags = &h0
-		Function twGetPicture(URL As  String) As Picture
+		Function twGetProfileImage(URL As  String) As Picture
 		  Dim socket As New twSocket
-		    Dim data As String = socket.Get(URL, 5)
+		  Dim data As String = socket.Get(URL, 5)
+		  
+		  If socket.HTTPStatusCode = 200 Then
 		    
-		    If socket.HTTPStatusCode = 200 Then
-		        
-		        Dim p As Picture = Picture.FromData(data)
-		        
-		        If p <> Nil Then
-		            Return p
-		        Else
-		            MsgBox("Could not get picture")
-		        End If
-		        
-		      Else 
-		        MsgBox("HTTP Status: " + Str(socket.HTTPStatusCode))
-		   End If
+		    Dim p As Picture = Picture.FromData(data)
+		    
+		    If p <> Nil Then
+		      Return p
+		    Else
+		      MsgBox("Could not get picture")
+		    End If
+		    
+		  Else 
+		    MsgBox("HTTP Status: " + Str(socket.HTTPStatusCode))
+		  End If
 		End Function
 	#tag EndMethod
 
@@ -101,8 +101,8 @@ Protected Module TwitterTools
 		        End if
 		        
 		        if user.HasKey("profile_image_url_https") Then
-		          NewTweet.twUserImagePath =  user.Value("profile_image_url_https")
-		          NewTweet.twUserImage = TwitterTools.twGetPicture(user.Value("profile_image_url_https"))
+		          NewTweet.twProfileImagePath =  user.Value("profile_image_url_https")
+		          NewTweet.twProfileImage = TwitterTools.twGetProfileImage(user.Value("profile_image_url_https"))
 		        End if
 		        
 		      End If

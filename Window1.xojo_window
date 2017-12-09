@@ -509,6 +509,7 @@ Begin Window Window1
       ScrollbarHorizontal=   False
       ScrollBarVertical=   True
       SelectionType   =   0
+      ShowDropIndicator=   False
       TabIndex        =   13
       TabPanelIndex   =   0
       TabStop         =   True
