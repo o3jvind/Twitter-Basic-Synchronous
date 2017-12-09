@@ -2,6 +2,20 @@
 Protected Module TwitterTools
 	#tag Method, Flags = &h0
 		Function twGetProfileImage(URL As  String) As Picture
+		  //First check if the picture has allready been downloaded
+		  If twProfileImages.Ubound > - 1 Then
+		    
+		    for i As Integer = 0 to twProfileImages.Ubound
+		      if twProfileImages(i).twProfileImagePath = URL Then
+		        Return twProfileImages(i).twProfileImage
+		        Exit Function
+		      End if
+		    Next
+		  End if
+		  
+		  //Else download it and add it to the twProfileImages array and return the picture
+		  'MsgBox(Str(twProfileImages.Ubound))
+		  
 		  Dim socket As New twSocket
 		  Dim data As String = socket.Get(URL, 5)
 		  
@@ -10,6 +24,10 @@ Protected Module TwitterTools
 		    Dim p As Picture = Picture.FromData(data)
 		    
 		    If p <> Nil Then
+		      Dim newImage As New twProfileImage
+		      newImage.twProfileImagePath = URL
+		      newImage.twprofileImage = p
+		      twProfileImages.Append(newImage)
 		      Return p
 		    Else
 		      MsgBox("Could not get picture")
@@ -85,6 +103,7 @@ Protected Module TwitterTools
 		    Dim n As  Xojo.Core.Dictionary
 		    
 		    ReDim twTweets(-1)
+		    ReDim twProfileImages(-1)
 		    
 		    For i As Integer = 0 to results.Ubound
 		      Dim NewTweet As New twTweetObject
@@ -137,6 +156,10 @@ Protected Module TwitterTools
 
 	#tag Property, Flags = &h0
 		twConsumerSecret As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		twProfileImages() As twProfileImage
 	#tag EndProperty
 
 	#tag Property, Flags = &h0

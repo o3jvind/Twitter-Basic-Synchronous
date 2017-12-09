@@ -21,7 +21,7 @@ Inherits Listbox
 		  
 		  g.DrawString s, 0, g.textsize, g.Width
 		  
-		  Return true
+		  Return true 
 		End Function
 	#tag EndEvent
 

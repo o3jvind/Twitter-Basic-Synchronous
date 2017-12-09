@@ -9,6 +9,7 @@ Module=TwitterTools;TwitterTools.xojo_code;&h0000000000564FFF;&h0000000000000000
 Class=twSocket;TwitterTools/twSocket.xojo_code;&h000000005C2387FF;&h0000000000564FFF;false
 Class=twTweetObject;TwitterTools/twTweetObject.xojo_code;&h00000000078437FF;&h0000000000564FFF;false
 Class=twListBox;TwitterTools/twListBox.xojo_code;&h000000003BACCFFF;&h0000000000564FFF;false
+Class=twProfileImage;TwitterTools/twProfileImage.xojo_code;&h0000000025967FFF;&h0000000000564FFF;false
 DefaultWindow=Window1
 AppMenuBar=MainMenuBar
 MajorVersion=1
