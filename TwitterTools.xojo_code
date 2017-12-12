@@ -3,10 +3,12 @@ Protected Module TwitterTools
 	#tag Method, Flags = &h0
 		Function twGetProfileImage(URL As  String) As Picture
 		  //Get the name of the image
-		  Dim ImageName(-1) As String
-		  ImageName = Split(URL, "/")
+		  Dim ImageNameParts(-1) As String = Split(URL, "/")
+		  Dim ImageName As String = ImageNameParts(ImageNameParts.Ubound)
 		  
-		  
+		  //Get the extension because we need to know if it is a jpeg or png image
+		  Dim ExtensionParts(-1) As String = Split(ImageName, ".")
+		  Dim Extension As String = ExtensionParts(ExtensionParts.Ubound)
 		  
 		  //Check if the picture has allready been downloaded
 		  If twProfileImages.Ubound > - 1 Then
@@ -14,7 +16,7 @@ Protected Module TwitterTools
 		    for i As Integer = 0 to twProfileImages.Ubound
 		      if twProfileImages(i).twProfileImagePath = URL Then
 		        Dim ImageFile As FolderItem
-		        ImageFile = SpecialFolder.Temporary.Child(ImageName(ImageName.Ubound))
+		        ImageFile = SpecialFolder.Temporary.Child(ImageName)
 		        
 		        If ImageFile <> Nil Then
 		          Dim p As Picture
@@ -38,17 +40,29 @@ Protected Module TwitterTools
 		    
 		    If p <> Nil Then
 		      
-		      If p.IsExportFormatSupported(Picture.FormatJPEG) Then
-		        //Save the file
-		        Dim f As  FolderItem
-		        f = SpecialFolder.Temporary.Child(ImageName(ImageName.Ubound))
-		        p.Save(f, Picture.SaveAsJPEG)
+		      //Save as PNG
+		      If Extension = "png" Then 
+		        If p.IsExportFormatSupported(Picture.FormatPNG) Then
+		          //Save the file
+		          Dim f As  FolderItem
+		          f = SpecialFolder.Temporary.Child(ImageName)
+		          p.Save(f, Picture.SaveAsPNG)
+		        End if
+		      else
+		        //Save as jpg
+		        If p.IsExportFormatSupported(Picture.FormatJPEG) Then
+		          //Save the file
+		          Dim f As  FolderItem
+		          f = SpecialFolder.Temporary.Child(ImageName)
+		          p.Save(f, Picture.SaveAsJPEG)
+		        End if
 		        //And add it to twProfileImages()
 		        Dim newImage As New twProfileImage
 		        newImage.twProfileImagePath = URL
 		        twProfileImages.Append(newImage)
-		        Return p
+		        
 		      End if
+		      Return p
 		    Else
 		      MsgBox("Could not get picture")
 		    End If
@@ -122,8 +136,12 @@ Protected Module TwitterTools
 		    Dim n As  Xojo.Core.Dictionary
 		    
 		    ReDim twTweets(-1)
+		    Dim twTweetsNumber As Integer
 		    
-		    For i As Integer = 0 to results.Ubound
+		    twTweetsNumber = results.Ubound
+		    Window1.NumberField.Text = Str(twTweetsNumber + 1)
+		    
+		    For i As Integer = 0 to twTweetsNumber
 		      Dim NewTweet As New twTweetObject
 		      n = results(i)
 		      If n.HasKey("created_at") Then
