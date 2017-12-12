@@ -38,7 +38,7 @@ Protected Module TwitterTools
 		    
 		    If p <> Nil Then
 		      
-		      If p.IsExportFormatSupported(Picture.FormatJPEGFormatJPEG) Then
+		      If p.IsExportFormatSupported(Picture.FormatJPEG) Then
 		        //Save the file
 		        Dim f As  FolderItem
 		        f = SpecialFolder.Temporary.Child(ImageName(ImageName.Ubound))
