@@ -193,11 +193,11 @@ Begin Window Window1
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   False
-      Left            =   20
+      Left            =   613
       LockBottom      =   False
       LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
+      LockLeft        =   False
+      LockRight       =   True
       LockTop         =   True
       Scope           =   0
       TabIndex        =   4
@@ -206,7 +206,7 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0.0
       TextUnit        =   0
-      Top             =   165
+      Top             =   144
       Underline       =   False
       Visible         =   True
       Width           =   133
@@ -328,7 +328,7 @@ Begin Window Window1
       Underline       =   False
       UseFocusRing    =   True
       Visible         =   True
-      Width           =   625
+      Width           =   643
    End
    Begin Label QueryLabel
       AutoDeactivate  =   True
@@ -367,7 +367,7 @@ Begin Window Window1
    End
    Begin TextField NumberField
       AcceptTabs      =   False
-      Alignment       =   0
+      Alignment       =   3
       AutoDeactivate  =   True
       AutomaticallyCheckSpelling=   False
       BackColor       =   &cFFFFFF00
@@ -382,7 +382,7 @@ Begin Window Window1
       HelpTag         =   ""
       Index           =   -2147483648
       Italic          =   False
-      Left            =   657
+      Left            =   675
       LimitText       =   0
       LockBottom      =   False
       LockedInPosition=   False
@@ -405,7 +405,7 @@ Begin Window Window1
       Underline       =   False
       UseFocusRing    =   True
       Visible         =   True
-      Width           =   89
+      Width           =   71
    End
    Begin Label Label1
       AutoDeactivate  =   True
@@ -418,7 +418,7 @@ Begin Window Window1
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   False
-      Left            =   657
+      Left            =   675
       LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   False
@@ -440,7 +440,7 @@ Begin Window Window1
       Transparent     =   True
       Underline       =   False
       Visible         =   True
-      Width           =   100
+      Width           =   71
    End
    Begin PushButton GetTweetsButton
       AutoDeactivate  =   True
@@ -455,11 +455,11 @@ Begin Window Window1
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   False
-      Left            =   20
+      Left            =   613
       LockBottom      =   False
       LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
+      LockLeft        =   False
+      LockRight       =   True
       LockTop         =   True
       Scope           =   0
       TabIndex        =   11
@@ -491,7 +491,7 @@ Begin Window Window1
       GridLinesVertical=   0
       HasHeading      =   True
       HeadingIndex    =   -1
-      Height          =   484
+      Height          =   475
       HelpTag         =   ""
       Hierarchical    =   False
       Index           =   -2147483648
@@ -516,13 +516,43 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0.0
       TextUnit        =   0
-      Top             =   390
+      Top             =   399
       Underline       =   False
       UseFocusRing    =   True
       Visible         =   True
       Width           =   726
       _ScrollOffset   =   0
       _ScrollWidth    =   -1
+   End
+   Begin ProgressBar ProgressBar1
+      AutoDeactivate  =   True
+      Enabled         =   True
+      Height          =   20
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Left            =   20
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   True
+      LockTop         =   True
+      Maximum         =   100
+      Scope           =   0
+      TabIndex        =   14
+      TabPanelIndex   =   0
+      Top             =   358
+      Value           =   0
+      Visible         =   True
+      Width           =   574
+   End
+   Begin Timer Timer1
+      Index           =   -2147483648
+      LockedInPosition=   False
+      Mode            =   0
+      Period          =   40
+      Scope           =   0
+      TabPanelIndex   =   0
    End
 End
 #tag EndWindow
@@ -603,8 +633,12 @@ End
 #tag Events GetTweetsButton
 	#tag Event
 		Sub Action()
+		  twCounter = 0
+		  Timer1.Mode = 2
 		  twGetTweets(QueryField.Text, NumberField.Text)
 		  TwitterListBox.Populate
+		  Timer1.Mode = 0
+		  ProgressBar1.Value = 0
 		End Sub
 	#tag EndEvent
 #tag EndEvents
@@ -616,6 +650,20 @@ End
 		  Me.Heading(2) = "User"
 		  Me.Heading(3) = "Message"
 		  Me.DefaultRowHeight = 60
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events ProgressBar1
+	#tag Event
+		Sub Open()
+		  Me.Value = 0
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events Timer1
+	#tag Event
+		Sub Action()
+		  ProgressBar1.Value = (twCounter/Val(Window1.NumberField.Text))* 100
 		End Sub
 	#tag EndEvent
 #tag EndEvents

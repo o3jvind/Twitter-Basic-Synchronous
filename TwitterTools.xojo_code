@@ -2,21 +2,34 @@
 Protected Module TwitterTools
 	#tag Method, Flags = &h0
 		Function twGetProfileImage(URL As  String) As Picture
-		  //First check if the picture has allready been downloaded
+		  //Get the name of the image
+		  Dim ImageName(-1) As String
+		  ImageName = Split(URL, "/")
+		  
+		  
+		  
+		  //Check if the picture has allready been downloaded
 		  If twProfileImages.Ubound > - 1 Then
 		    
 		    for i As Integer = 0 to twProfileImages.Ubound
 		      if twProfileImages(i).twProfileImagePath = URL Then
-		        Return twProfileImages(i).twProfileImage
+		        Dim ImageFile As FolderItem
+		        ImageFile = SpecialFolder.Temporary.Child(ImageName(ImageName.Ubound))
+		        
+		        If ImageFile <> Nil Then
+		          Dim p As Picture
+		          p = Picture.Open(ImageFile)
+		          Return p
+		        End If
 		        Exit Function
 		      End if
 		    Next
 		  End if
 		  
 		  //Else download it and add it to the twProfileImages array and return the picture
-		  'MsgBox(Str(twProfileImages.Ubound))
 		  
 		  Dim socket As New twSocket
+		  socket.Yield = True
 		  Dim data As String = socket.Get(URL, 5)
 		  
 		  If socket.HTTPStatusCode = 200 Then
@@ -24,11 +37,18 @@ Protected Module TwitterTools
 		    Dim p As Picture = Picture.FromData(data)
 		    
 		    If p <> Nil Then
-		      Dim newImage As New twProfileImage
-		      newImage.twProfileImagePath = URL
-		      newImage.twprofileImage = p
-		      twProfileImages.Append(newImage)
-		      Return p
+		      
+		      If p.IsExportFormatSupported(Picture.FormatJPEGFormatJPEG) Then
+		        //Save the file
+		        Dim f As  FolderItem
+		        f = SpecialFolder.Temporary.Child(ImageName(ImageName.Ubound))
+		        p.Save(f, Picture.SaveAsJPEG)
+		        //And add it to twProfileImages()
+		        Dim newImage As New twProfileImage
+		        newImage.twProfileImagePath = URL
+		        twProfileImages.Append(newImage)
+		        Return p
+		      End if
 		    Else
 		      MsgBox("Could not get picture")
 		    End If
@@ -83,7 +103,6 @@ Protected Module TwitterTools
 		  Dim s As String
 		  Dim t As  Text
 		  
-		  
 		  twTweetsSocket.SetRequestHeader("Authorization:", "Bearer " + twAccessToken)
 		  s = twTweetsSocket.Get("https://api.twitter.com/1.1/search/tweets.json?q="+ EncodeURLComponent(twQ) + "&count=" + twCount, 30)
 		  
@@ -103,7 +122,6 @@ Protected Module TwitterTools
 		    Dim n As  Xojo.Core.Dictionary
 		    
 		    ReDim twTweets(-1)
-		    ReDim twProfileImages(-1)
 		    
 		    For i As Integer = 0 to results.Ubound
 		      Dim NewTweet As New twTweetObject
@@ -135,13 +153,14 @@ Protected Module TwitterTools
 		      End if
 		      
 		      twTweets.Append(NewTweet)
-		      
+		      twCounter = i
 		    Next
 		    
 		  Catch JSONException
 		    Msgbox(t)
 		    
 		  End Try
+		  
 		End Sub
 	#tag EndMethod
 
@@ -156,6 +175,10 @@ Protected Module TwitterTools
 
 	#tag Property, Flags = &h0
 		twConsumerSecret As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		twCounter As Integer = 0
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
@@ -220,6 +243,12 @@ Protected Module TwitterTools
 			InitialValue="NpGzOfkvPB77d5GGk1oBGf4Y4gC8we7j5GUcLfHxRHf3YJSICm"
 			Type="String"
 			EditorType="MultiLineEditor"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="twCounter"
+			Group="Behavior"
+			InitialValue="0"
+			Type="Integer"
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Module

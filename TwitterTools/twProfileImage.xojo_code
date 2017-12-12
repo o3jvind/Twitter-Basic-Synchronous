@@ -1,10 +1,6 @@
 #tag Class
 Protected Class twProfileImage
 	#tag Property, Flags = &h0
-		twProfileImage As Picture
-	#tag EndProperty
-
-	#tag Property, Flags = &h0
 		twProfileImagePath As String
 	#tag EndProperty
 
@@ -44,9 +40,15 @@ Protected Class twProfileImage
 			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
+			Name="twProfileImage"
+			Group="Behavior"
+			Type="Picture"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="twProfileImagePath"
 			Group="Behavior"
-			Type="Integer"
+			Type="String"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

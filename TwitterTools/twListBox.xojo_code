@@ -2,6 +2,17 @@
 Protected Class twListBox
 Inherits Listbox
 	#tag Event
+		Function CellBackgroundPaint(g As Graphics, row As Integer, column As Integer) As Boolean
+		  If row Mod 2 = 0 Then
+		    g.ForeColor= &cFFFFFF
+		  Else
+		    g.ForeColor= &cF5F5F5
+		  End If
+		  g.FillRect(0, 0, g.Width, g.Height)
+		End Function
+	#tag EndEvent
+
+	#tag Event
 		Function CellTextPaint(g As Graphics, row As Integer, column As Integer, x as Integer, y as Integer) As Boolean
 		  If column = 0 Then
 		    
@@ -9,7 +20,7 @@ Inherits Listbox
 		  End If
 		  
 		  dim s as string = me.Cell(row, column)
-		  
+		  s = EndOfLine + s
 		  g.TextSize = 10
 		  dim h as integer = g.StringHeight(s, g.Width)
 		  
